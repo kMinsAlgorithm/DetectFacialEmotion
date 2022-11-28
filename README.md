@@ -1,2 +1,2 @@
-# DetectFacialEmotion BY CNN
+# DetectFacialEmotion By CNN
 
