@@ -27,7 +27,8 @@ def getLabel_ByArgmax(preds):
     index = np.argmax(preds[0])
     return file_list[index]
      
-#학습 시킨 모델 불러오기
+#학습 시킨 모델 불러오기 현재 weights_best_emotion_detect5 모델이 가장 인식률이 좋음.
+
 emotion_detect_model = load_model('weights_best_emotion_detect5.h5')
 
 #영상 위에 투명도 정보가 존재하는 이미지 그리기
