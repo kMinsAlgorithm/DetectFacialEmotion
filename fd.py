@@ -5,6 +5,8 @@ from keras.models import load_model
 import tensorflow as tf
 import numpy as np
 
+img_size =300
+
 #얼굴을 찾고 찾은 얼굴에 표시를해주기 위한 변수 정의
 mp_face_detection = mp.solutions.face_detection # 얼굴 검출을 위한 face_detection 모듈을 사용
 mp_drawing = mp.solutions.drawing_utils #얼굴의 특징을 그리기 위한 Drawing_utils 모듈을 사용 
@@ -22,11 +24,12 @@ print("file list:",file_list)
 
 #argmax방식으로 리턴    
 def getLabel_ByArgmax(preds):
-    index = np.argmax(preds)
+    index = np.argmax(preds[0])
     return file_list[index]
      
-#학습 시킨 모델 불러오기
-emotion_detect_model = load_model('weights_best_emotion_detect3.h5')
+#학습 시킨 모델 불러오기 현재 weights_best_emotion_detect5 모델이 가장 인식률이 좋음.
+
+emotion_detect_model = load_model('weights_best_emotion_detect5.h5')
 
 #영상 위에 투명도 정보가 존재하는 이미지 그리기
 def overlay(image, x,y,overlay_image):
@@ -46,7 +49,7 @@ def overlay(image, x,y,overlay_image):
         image[y:y+300, x:x+300, c] = (overlay_image[:,:,c] * mask_image) + image[y:y+300, x:x+300,c] * (1 - mask_image)
 
 def predict_emotion(image):
-          preds = emotion_detect_model.predict(image.reshape(-1,64,64,3))
+          preds = emotion_detect_model.predict(image.reshape(-1,img_size,img_size,3))
           text = getLabel_ByArgmax(preds)
           
           return text
@@ -94,8 +97,9 @@ with mp_face_detection.FaceDetection(model_selection=0, min_detection_confidence
         
         #감정 분석
         if a %19 == 0:
-          crop = image[y-100:y+300,x-100:x+300]
-          resize_img = cv2.resize(crop,(64,64),cv2.INTER_AREA)
+          # crop = image[y-100:y+300,x-100:x+300]
+          crop = image[y:y+w,x:x+w]
+          resize_img = cv2.resize(crop,(img_size,img_size),cv2.INTER_AREA)
           # gray_img = cv2.cvtColor(resize_img,cv2.COLOR_BGR2GRAY)
           # print(resize_img.shape)
           cv2.imwrite(f'./image/croped_image{a}.jpg', resize_img)
