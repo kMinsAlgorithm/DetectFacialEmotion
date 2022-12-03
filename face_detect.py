@@ -99,7 +99,7 @@ x,y = shuffle(img_data,Y, random_state=2)
 # X_train, X_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=2)
 
 #모델 생성 및 요약
-import creat_model as cm
+import create_model as cm
 
 model_custom = cm.create_model()
 
